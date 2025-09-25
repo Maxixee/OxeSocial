@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Usuarios", description = "Contém todas as operações relativas aos recursos para cadastro, edição e leitura de um usuário.")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("oxe/v1/usuarios")
 public class UsuariosController {
@@ -51,13 +52,13 @@ public class UsuariosController {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<UsuarioResponseDto> getById(@PathVariable Long id){
         Usuario usuario = service.getById(id);
         return ResponseEntity.ok(UsuarioMapper.toDto(usuario));
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<UsuarioResponseDto> getByEmail(@PathVariable String email){
         Usuario usuario = service.getByEmail(email);
         return ResponseEntity.ok(UsuarioMapper.toDto(usuario));

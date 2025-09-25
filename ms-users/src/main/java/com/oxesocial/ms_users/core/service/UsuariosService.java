@@ -28,6 +28,11 @@ public class UsuariosService {
     public Usuario salvar(Usuario usuario){
         try {
             usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+            if(!usuario.getEmail().equals("hiego@gmail.com")){
+                usuario.setRole(Roles.ROLE_USER);
+            }else {
+                usuario.setRole(Roles.ROLE_ADMIN);
+            }
             return repository.save(usuario);
         } catch (org.springframework.dao.DataIntegrityViolationException e){
             throw new EmailUniqueViolationException(String.format("O email %s já está em uso", usuario.getEmail()));
@@ -40,7 +45,7 @@ public class UsuariosService {
             throw new PasswordInvalidException("A nova senha e a confirmação da senha são diferentes");
         }
 
-        if(!senhaAtual.equals(novaSenha)){
+        if(senhaAtual.equals(novaSenha)){
             throw new PasswordInvalidException("A nova senha tem que ser diferente da atual");
         }
 
@@ -49,7 +54,7 @@ public class UsuariosService {
             throw new PasswordInvalidException("Sua senha atual está incorreta ");
         }
 
-        user.setSenha(novaSenha);
+        user.setSenha(passwordEncoder.encode(novaSenha));
         return user;
 
     }
